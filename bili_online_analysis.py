@@ -5,7 +5,7 @@
 # @Time    : 2018/10/30
 # @Author  : 圈圈烃
 # @File    : bili_online_analysis
-# @Description:
+# @Description: B站在线数据获取
 #
 #
 from BiliSpider import BiliSpider
@@ -29,6 +29,7 @@ def online_info(bili, online_info_db, timestamp):
         "最新投稿": all_count,
         "在线人数": web_online,
     }
+    # 存入数据库
     online_info_db.insert_one(data_dic)
     print("数据保存成功... %s" % timestamp)
 

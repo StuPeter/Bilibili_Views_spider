@@ -10,7 +10,6 @@
 #
 import requests
 import json
-import time
 
 
 class BiliSpider:
@@ -46,8 +45,6 @@ class BiliSpider:
         :return:
         """
         online_dic = BiliSpider.get_api(self.online_api)
-        # print("最新投稿:%d" % online_dic['data']['all_count'])
-        # print("在线人数:%d" % online_dic['data']['web_online'])
         return online_dic
 
     def get_video_info(self, aid):
@@ -69,7 +66,6 @@ class BiliSpider:
         :return:
         """
         res = BiliSpider.get_api(self.newlist_api %(rid, pn, ps))
-        # print(res)
         return res
 
     def get_region_info(self, rid, pn, ps):
@@ -81,7 +77,6 @@ class BiliSpider:
         :return:
         """
         res = BiliSpider.get_api(self.region_api %(rid, pn, ps))
-        # print(res)
         return res
 
     def get_member_info(self, mid):
@@ -104,7 +99,6 @@ class BiliSpider:
         }
         res = requests.post(self.member_api, data=post_data, headers=header)
         member_dic = json.dumps(res.json(), ensure_ascii=False)
-        # print(member_dic)
         return member_dic
 
     def get_stat_info(self, vmid):
@@ -114,7 +108,6 @@ class BiliSpider:
         :return:
         """
         res = BiliSpider.get_api(self.stat_api % vmid)
-        # print(res)
         return res
 
     def get_upstat_info(self, mid):
@@ -124,7 +117,6 @@ class BiliSpider:
         :return:
         """
         res = BiliSpider.get_api(self.upstat_api % mid)
-        # print(res)
         return res
 
     def get_follower_info(self, vmid, pn, ps):
@@ -136,7 +128,6 @@ class BiliSpider:
         :return:
         """
         res = BiliSpider.get_api(self.follower_api %(vmid, pn, ps))
-        # print(res)
         return res
 
     def get_fans_info(self, vmid, pn, ps):
@@ -148,57 +139,11 @@ class BiliSpider:
         :return:
         """
         res = BiliSpider.get_api(self.fans_api %(vmid, pn, ps))
-        # print(res)
         return res
 
 
-def get_rid_tid():
-    """
-    获取每个二级标题的id号
-    :return:
-    """
-    bili = BiliSpider()
-    online_dic = bili.get_online()
-    rid_list = list(online_dic['data']['region_count'].keys())  # 获取rid列表
-    print(rid_list)
-    tid_list_1 = list()
-    for rid in rid_list:
-        time.sleep(0.5)
-        res = bili.get_newlist_info(rid, 1, 20)
-        avinfo = res['data']['archives']
-        for av in avinfo:
-            tid = av['tid']
-            tname = av['tname']
-            tid_list_1.append(str(tid) + ":" + tname + "\n")
-    tid_list = list(set(tid_list_1))
-    tid_list.sort(key=tid_list_1.index)
-    print("tid数量：%d" % len(tid_list))
-    tid_text = ""
-    for tid in tid_list:
-        tid_text += tid
-    # print(tid_text)
-    with open("tid_info_1.txt", 'w', encoding='utf-8') as fw:
-        fw.write(tid_text)
-        print("tid_info_1.txt 保存成功")
-
-
 if __name__ == '__main__':
-    # get_rid_tid()
     bili = BiliSpider()
-    online_dic = bili.get_online()
-    rid_list = list(online_dic['data']['region_count'].keys())  # 获取rid列表
-    print(rid_list)
-    # bili = BiliSpider()
-    # bili.get_online()
-    # res = bili.get_upstat_info(25911961)
-    # print(res)
-    # res = bili.get_newlist_info(122, 1, 20)
-    # bili.get_region_info(122, 1, 20)
-    # res = bili.get_member_info("353498854")
-    # res = bili.get_upstat_info("353498854")
-    # res = bili.get_stat_info("353498854")
-    # res = bili.get_video_info("34400143")
-    # print(res)
-    # bili.get_follower_info(25911961, 1, 26)
-    # bili.get_fans_info(25911961, 1, 1)
+    res = bili.get_member_info("330626607")
+    print(res)
 
